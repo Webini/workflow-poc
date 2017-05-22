@@ -1,0 +1,35 @@
+{
+  "name": "mediator-entry-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "debug": "^2.6.8",
+    "dotenv": "^2.0.0",
+    "express": "^4.14.0",
+    "raven": "^2.0.1",
+    "request": "^2.81.0",
+    "request-promise-native": "^1.0.4"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "mocha": "^3.2.0",
+    "nock": "^9.0.13",
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Webini/workflow-poc.git"
+  },
+  "author": "GASPARINI Nicolas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Webini/workflow-poc/issues"
+  },
+  "homepage": "https://github.com/Webini/workflow-poc#readme"
+}
