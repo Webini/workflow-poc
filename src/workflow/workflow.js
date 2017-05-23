@@ -1,4 +1,5 @@
 const types = require('./types/index.js');
+const debug = require('debug')('Workflow');
 
 function buildServices(serviceFactory, configurations) {
   const services = {};
@@ -68,7 +69,12 @@ module.exports = function(definition) {
     return workflows
       .reduce(async (promise, workflow) => {
         const data = await promise;
-        return execute(data, workflow);
+        debug('Data received %O', data);
+        if (data !== null) { //null body cancel workflow
+          return execute(data, workflow);
+        } else {
+          return promise;
+        }
       }, Promise.resolve(data))
     ;
   };

@@ -3,12 +3,16 @@ const fs = require('fs');
 module.exports = {
   configuration: {
     api: {
-      zenhub: {
-        host: 'https://api.zenhub.io/',
+      github: {
+        host: 'https://api.github.com/',
         headers: [
           {
-            name: 'X-Authentication-Token',
-            value: 'bba0bb913a82bf0cf74903733c8e779a1f2839517741908f3e4fe7ab47f173b2998341f5c49387c3'
+            name: 'Authorization',
+            value: `token ${process.env.GITHUB_TOKEN}`
+          },
+          {
+            name: 'user-agent',
+            value: 'Webini workflow'
           }
         ]
       }
@@ -23,9 +27,9 @@ module.exports = {
     },
     {
       type: 'api',
-      name: 'zenhub',
+      name: 'github',
       configuration: {
-        path: '/p1/repositories/:repo_id/issues/:issue_number/moves',
+        path: '/repos/:owner/:repo/issues/:number/comments',
         method: 'POST'
       }
     }

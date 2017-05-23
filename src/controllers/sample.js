@@ -1,10 +1,18 @@
+const makeWorkflow = require('../workflow/workflow.js');
+const definition = require('../wfconf/workflow-test.js');
+
 module.exports = {
-  /**
-   * Extract metadata from filename
-   */
-  parse: (req, res, next) => {
-    guessit(req.body.filename)
-      .then((data) => res.apiSuccess(data))
-      .catch((e) => res.apiError(LOG_PREFIX, 'Cannot parse filename', e));
+  process: async (req, res) => {
+    try {
+      const workflow = makeWorkflow(definition);
+      const result = await workflow({
+        body: req.body,
+        headers: req.headers
+      });
+      res.json(result).send();
+    } catch(e) {
+      console.log(e);
+      res.status(500).send();
+    }
   }
 };

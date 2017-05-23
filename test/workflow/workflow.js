@@ -108,4 +108,27 @@ describe('Workflow', () => {
     const result = await workflow({ repositoryId: 42 });
     assert.strictEqual(result, 'yolo on 1337', 'Invalid result');
   });
+
+  it('should be cancelled if null is returned', async () => {
+    const workflow = createWorkflow({
+      workflow: [
+        { 
+          type: 'lambda',
+          configuration: {
+            code: 'return null;'
+          }
+        },
+        {
+          type: 'lambda',
+          configuration: {
+            code: 'return 42;'
+          }
+        }
+      ]
+    });
+
+    const result = await workflow({});
+
+    assert.deepStrictEqual(result, null);
+  });
 });
