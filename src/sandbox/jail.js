@@ -1,15 +1,15 @@
+const vm = require('vm');
+
 /**
  * @param {Context} context 
  */
-module.exports = (context) => {
+module.exports = (context, timeout = 60) => {
   const scope = context.getScope();
+
   return function(code) {
     return (async () => {
-      with (scope) {
-        return await eval(
-          `(async function(){ ${code} }())` 
-        );
-      }
+      vm.runInNewContext(`'use strict'; module.exports = (async function(){ ${code} })();`, scope, { timeout });
+      return await scope.module.exports;
     })();
   };
 };

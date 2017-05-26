@@ -86,7 +86,6 @@ describe('Workflow', () => {
       ]
     });
 
-
     nock('https://zenhub.com')
       .get(`/pipeline/${repositoryId}`)
       .once()

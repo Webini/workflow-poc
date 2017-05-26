@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "amqplib": "^0.5.1",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "debug": "^2.6.8",

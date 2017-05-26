@@ -2,7 +2,12 @@ module.exports = class Context {
   constructor() {
     this.scope = {
       require: null,
-      process: null
+      process: null,
+      global: null,
+      eval: null,
+      module: {
+        exports: null
+      }
     };
   }
 
