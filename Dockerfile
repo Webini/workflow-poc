@@ -11,7 +11,7 @@ VOLUME [ "/home/node/server/data" ]
 ADD "src" "/home/node/server/src"
 ADD [ \
   "package.json", \
-  "server.js", \
+  "run.js", \
   "/home/node/server/" \
 ]
 
