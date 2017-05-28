@@ -1,5 +1,5 @@
 const types = require('./types/index.js');
-const debug = require('debug')('Workflow');
+const debug = require('../debug.js');
 
 function buildServices(serviceFactory, configurations) {
   const services = {};
@@ -27,6 +27,10 @@ function linkService(service, services) {
 
 function createService(services, serviceFactory, configurations) {
   const service = serviceFactory(null, configurations);
+  if (!service) {
+    return null;
+  }
+
   linkService(service, services);
   return service;
 } 
@@ -52,18 +56,19 @@ module.exports = function(definition) {
       if (!typeFactory) {
         throw new Error(`Invalid type ${workflow.type}`);
       }
-
+      
       service = createService(services, types[workflow.type]);
     } else {
       service = servicesStack[workflow.name];
-      if (!service) {
-        throw new Error(`Cannot found item ${workflow.name} in type stack ${workflow.type}`);
-      }
+    }
+    if (!service) {
+      throw new Error(`Cannot found item ${workflow.name} in type stack ${workflow.type}`);
     }
 
     return await service.execute(workflow.configuration || {}, data);
   }
 
+  debug('Workflow built');
   return async function(data) {
     const workflows = definition.workflow;
     return workflows

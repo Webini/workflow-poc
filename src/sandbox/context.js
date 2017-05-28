@@ -5,9 +5,9 @@ module.exports = class Context {
       process: null,
       global: null,
       eval: null,
-      module: {
-        exports: null
-      }
+      __dirname: null,
+      __filename: null,
+      module: {}
     };
   }
 

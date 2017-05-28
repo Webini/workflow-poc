@@ -5,9 +5,9 @@ services:
   metadata:
     build: ./
     env_file:
-     - ./.env.test
+     - ./.env.dev
     environment:
-      RABBITMQ_HOST: rabbitmq.host
+      RABBITMQ_URL: amqp://rabbitmq.host
       SERVER_PORT: 8080
       SENTRY_URL: 
     restart: always

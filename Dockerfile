@@ -3,10 +3,6 @@ FROM node:7.10.0
 ENV SERVER_PORT 8080
 ENV SERVER_HOST 0.0.0.0
 ENV NODE_ENV production
-
-RUN apt-get update && \
-    apt-get install -y --force-yes python-pip && \
-    pip install guessit
     
 RUN git clone https://github.com/Webini/wait-for-it ./wait-for-it && \
     mv ./wait-for-it/wait-for-it.sh /usr/local/bin && \

@@ -29,6 +29,10 @@ function replaceVar(path, data) {
 }
 
 module.exports = function(configuration, name) {
+  if (!configuration) {
+    return null;
+  }
+  
   const headers = makeHeaders(configuration.headers || []);
 
   async function callServer(method, path, data = {}) {

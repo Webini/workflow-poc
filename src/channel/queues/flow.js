@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 const connection = require('../connection.js');
 const channelPromise = require('../workflow.js');
 const consumer = require('../../consumers/flow.js');
-const QUEUE_NAME = 'workflow-consumers';
+const QUEUE_NAME = process.env.QUEUE_NAME || 'workflow-messages';
 
 async function create() {
   const { channel, exchange } = await channelPromise;
