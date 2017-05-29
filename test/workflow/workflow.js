@@ -114,7 +114,7 @@ describe('Workflow', () => {
         { 
           type: 'lambda',
           configuration: {
-            code: 'return workflow.cancel();'
+            code: 'return workflow.cancel(\'nop\');'
           }
         },
         {
@@ -128,7 +128,7 @@ describe('Workflow', () => {
 
     const result = await workflow({});
 
-    assert.deepStrictEqual(result, 'Workflow cancelled at step 0');
+    assert.deepStrictEqual(result, 'Workflow cancelled at step 0 with message "nop"');
   });
 
   it('should split workflow', async () => {

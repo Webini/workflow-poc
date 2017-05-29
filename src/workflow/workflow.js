@@ -84,7 +84,11 @@ module.exports = function(definition) {
         }
 
         if (data instanceof Cancel) {
-          return new Ignore(`Workflow cancelled at step ${index-1}`);
+          let msg = `Workflow cancelled at step ${index-1}`;
+          if (data.hasMessage()) {
+            msg += ` with message "${data.getMessage()}"`;
+          }
+          return new Ignore(msg);
         }
         
         if (data instanceof Split) {
