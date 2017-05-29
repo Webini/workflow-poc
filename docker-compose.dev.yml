@@ -2,7 +2,7 @@
 version: "2.0"
 
 services:
-  metadata:
+  worker:
     build: ./
     env_file:
      - ./.env.dev
@@ -17,11 +17,9 @@ services:
       - rabbitmq
     volumes:
       - ./:/home/node/server
-    ports:
-      - 8080:8080
     command: [
       wait-for-it.sh, "rabbitmq.host:5672", -t, "120", -sa, "10", -s, --
-      node, ./node_modules/.bin/nodemon, run.js, migrate, server
+      node, ./node_modules/.bin/nodemon, run.js, worker
     ]
 
   rabbitmq:
