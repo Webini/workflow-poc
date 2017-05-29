@@ -11,7 +11,7 @@ module.exports = (apis, workflow) => {
         .keys(api.qs || {})
         .map((name) => ({
           name,
-          value: api.headers[name]
+          value: api.qs[name]
         })),
       headers: Object
         .keys(api.headers || {})

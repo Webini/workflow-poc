@@ -28,6 +28,13 @@ function replaceVar(path, data) {
   });
 }
 
+function addFirstSlash(str) {
+  if (str.substr(0, 1) === '/') {
+    return str;
+  }
+  return `/${str}`;
+}
+
 module.exports = function(configuration, name) {
   if (!configuration) {
     return null;
@@ -39,7 +46,7 @@ module.exports = function(configuration, name) {
   async function callServer(method, path, data = {}, conf = { qs: {} }) {
     return request({
       headers: headers,
-      uri: url.resolve(configuration.host, replaceVar(path, data)),
+      uri: configuration.host + addFirstSlash(replaceVar(path, data)),
       json: true,
       method: method,
       body: data,
