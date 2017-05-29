@@ -1,5 +1,8 @@
 const types = require('./types/index.js');
 const debug = require('../debug.js');
+const Cancel = require('./commands/cancel.js');
+const Split = require('./commands/split.js');
+const Ignore = require('./commands/ignore.js');
 
 function buildServices(serviceFactory, configurations) {
   const services = {};
@@ -69,18 +72,46 @@ module.exports = function(definition) {
   }
 
   debug('Workflow built');
-  return async function(data) {
-    const workflows = definition.workflow;
-    return workflows
-      .reduce(async (promise, workflow) => {
+  async function executeAll(data, workflows) {
+    workflows = workflows || definition.workflow;
+    const result = await workflows
+      .reduce(async (promise, workflow, index) => {
         const data = await promise;
         debug('Data received %O', data);
-        if (data !== null) { //null body cancel workflow
-          return execute(data, workflow);
-        } else {
+        
+        if (data instanceof Ignore) {
           return promise;
         }
+
+        if (data instanceof Cancel) {
+          return new Ignore(`Workflow cancelled at step ${index-1}`);
+        }
+        
+        if (data instanceof Split) {
+          const subWorkflow = workflows.slice(index);
+          const result = data
+            .getData()
+            .reduce(async (promise, data) => {
+              const ret = await promise;
+              ret.push(await executeAll(data, subWorkflow));
+              return ret;
+            }, Promise.resolve([]))
+          ;
+          return new Ignore(result);
+        }
+
+        return execute(data, workflow);
       }, Promise.resolve(data))
     ;
+    
+    if (result instanceof Ignore) {
+      return result.getData();
+    }
+    return result;
+  }
+
+  //protect workflows arg
+  return function(data) {
+    return executeAll(data);
   };
 };

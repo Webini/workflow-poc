@@ -35,6 +35,13 @@ function addFirstSlash(str) {
   return `/${str}`;
 }
 
+function removeLastSlash(str) {
+  if (str.substr(-1) === '/') {
+    return str.substr(0, str.length-1);
+  }
+  return str;
+}
+
 module.exports = function(configuration, name) {
   if (!configuration) {
     return null;
@@ -46,7 +53,7 @@ module.exports = function(configuration, name) {
   async function callServer(method, path, data = {}, conf = { qs: {} }) {
     return request({
       headers: headers,
-      uri: configuration.host + addFirstSlash(replaceVar(path, data)),
+      uri: removeLastSlash(configuration.host) + addFirstSlash(replaceVar(path, data)),
       json: true,
       method: method,
       body: data,

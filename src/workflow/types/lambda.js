@@ -1,12 +1,14 @@
 const makeJail = require('../../sandbox/jail.js');
 const Context = require('../../sandbox/context.js');
- 
+const createCommands = require('../commands/commands.js');
+
 module.exports = function() {
   const context = new Context();
   const jail = makeJail(context);
 
   async function execute(configuration, data) {
     context.add('data', data);
+    context.add('workflow', createCommands());
     return await jail(configuration.code);
   }
 

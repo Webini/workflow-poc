@@ -108,13 +108,13 @@ describe('Workflow', () => {
     assert.strictEqual(result, 'yolo on 1337', 'Invalid result');
   });
 
-  it('should be cancelled if null is returned', async () => {
+  it('should be cancelled if workflow.cancel() is returned', async () => {
     const workflow = createWorkflow({
       workflow: [
         { 
           type: 'lambda',
           configuration: {
-            code: 'return null;'
+            code: 'return workflow.cancel();'
           }
         },
         {
@@ -128,6 +128,28 @@ describe('Workflow', () => {
 
     const result = await workflow({});
 
-    assert.deepStrictEqual(result, null);
+    assert.deepStrictEqual(result, 'Workflow cancelled at step 0');
+  });
+
+  it('should split workflow', async () => {
+    const workflow = createWorkflow({
+      workflow: [
+        { 
+          type: 'lambda',
+          configuration: {
+            code: 'return workflow.split([ 1, 2, 3, 4 ]);'
+          }
+        },
+        {
+          type: 'lambda',
+          configuration: {
+            code: 'return data+1;'
+          }
+        }
+      ]
+    });
+
+    const result = await workflow({});
+    assert.deepStrictEqual(result, [ 2, 3, 4, 5 ]);
   });
 });
