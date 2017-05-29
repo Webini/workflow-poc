@@ -6,6 +6,12 @@ module.exports = (apis, workflow) => {
   doc.api = (apis.data || []).reduce((apis, api) => {
     apis[api.name] = {
       host: api.host,
+      qs: Object
+        .keys(api.qs || {})
+        .map((name) => ({
+          name,
+          value: api.headers[name]
+        })),
       headers: Object
         .keys(api.headers || {})
         .map((name) => ({
