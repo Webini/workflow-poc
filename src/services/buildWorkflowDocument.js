@@ -1,9 +1,10 @@
 module.exports = (apis, workflow) => {
   const doc = {
-    workflow: workflow.configuration
+    workflow: workflow.configuration,
+    configuration: {}
   };
 
-  doc.api = (apis.data || []).reduce((apis, api) => {
+  doc.configuration.api = (apis.data || []).reduce((apis, api) => {
     apis[api.name] = {
       host: api.host,
       qs: Object
