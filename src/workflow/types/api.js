@@ -2,13 +2,13 @@ const url = require('url');
 const request = require('request-promise-native');
 
 /**
- * @param {Array.<{name,value}>} headers 
+ * @param {Array.<{name,value}>} elements array with keyval 
  * @returns 
  */
-function makeHeaders(headers) {
-  return headers
-    .reduce((object, header) => {
-      object[header.name] = header.value;
+function makeMap(elements) {
+  return elements
+    .reduce((object, el) => {
+      object[el.name] = el.value;
       return object;
     }, {})
   ;
@@ -33,15 +33,17 @@ module.exports = function(configuration, name) {
     return null;
   }
   
-  const headers = makeHeaders(configuration.headers || []);
+  const headers = makeMap(configuration.headers || []);
+  const query = makeMap(configuration.qs || []);
 
-  async function callServer(method, path, data = {}) {
+  async function callServer(method, path, data = {}, conf = { qs: {} }) {
     return request({
       headers: headers,
       uri: url.resolve(configuration.host, replaceVar(path, data)),
       json: true,
       method: method,
       body: data,
+      qs: Object.assign(query, conf.qs)
     });
   }
 
@@ -50,8 +52,8 @@ module.exports = function(configuration, name) {
    * @param {any} data data to pass
    * @returns 
    */
-  async function execute(configuration, data) {
-    return callServer(configuration.method || 'GET', configuration.path, data);
+  async function execute(configuration = {}, data) {
+    return callServer(configuration.method || 'GET', configuration.path, data, { qs: configuration.qs || {} });
   }
 
   return {
