@@ -9,8 +9,10 @@ async function execute(originalData, workflow) {
   
   async function executeExternal(name, data, cancel = false) {
     const results = await api.searchWorkflows({ 
-      name,
-      project_id: workflow.project_id
+      body: {
+        name,
+        project_id: workflow.project_id
+      }
     });
 
     if (results.count > 1) {

@@ -15,6 +15,7 @@ Name | Parameters | Action
 workflow.split(datas) | array | Each element passed to workflow.split will start the same workflow at the current step + 1. The data will be hydrated with array item.
 workflow.cancel(message) | string | Cancel the workflow
 async api[api defined in the project](method, path, body) | string, string, object | Make an api call  
+workflow.external(workflowName, data, cancel = false) | string, object, boolean | Call an external workflow, if cancel = true, the current workflow is cancelled and the response won't be forwarded to the next steps.
 
 Env
 ===
