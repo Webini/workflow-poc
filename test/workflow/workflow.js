@@ -152,4 +152,40 @@ describe('Workflow', () => {
     const result = await workflow({});
     assert.deepStrictEqual(result, [ 2, 3, 4, 5 ]);
   });
+
+  it('should throw error', (done) => {
+    const workflow = createWorkflow({
+      workflow: [
+        { 
+          type: 'lambda',
+          configuration: {
+            code: 'return workflow.external("yolo");'
+          }
+        }
+      ]
+    });
+
+    workflow({})
+      .then(() => done(new Error('workflow didn\'t throw')))
+      .catch(() => done())
+    ;
+  });
+
+  it('should use resolver callback', async () => {
+    const workflow = createWorkflow({
+      workflow: [
+        { 
+          type: 'lambda',
+          configuration: {
+            code: 'return workflow.external("yolo", 42);'
+          }
+        }
+      ]
+    }, (name, count) => {
+      return name + count;
+    });
+
+    const result = await workflow({});
+    assert.deepStrictEqual(result, 'yolo42');
+  });
 });

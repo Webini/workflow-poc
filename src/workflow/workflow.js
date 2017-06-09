@@ -3,6 +3,7 @@ const debug = require('../debug.js');
 const Cancel = require('./commands/cancel.js');
 const Split = require('./commands/split.js');
 const Ignore = require('./commands/ignore.js');
+const External = require('./commands/external.js');
 
 function buildServices(serviceFactory, configurations) {
   const services = {};
@@ -38,7 +39,11 @@ function createService(services, serviceFactory, configurations) {
   return service;
 } 
 
-module.exports = function(definition) {
+function defaultExternalCallback() {
+  throw new Error('No external callback defined');
+}
+
+module.exports = function(definition, externalCallback = defaultExternalCallback) {
   const services = buildServices((conf, name) => {
     return buildServices(types[name], conf || {});
   }, definition.configuration || {});
@@ -104,7 +109,13 @@ module.exports = function(definition) {
           return new Ignore(result);
         }
 
-        return execute(data, workflow);
+        const result = await execute(data, workflow);
+
+        if (result instanceof External) {
+          return await externalCallback.apply(externalCallback, result.getParameters());
+        }
+
+        return result;
       }, Promise.resolve(data))
     ;
     

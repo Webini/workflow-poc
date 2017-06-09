@@ -1,5 +1,6 @@
 const Cancel = require('./cancel.js');
 const Split = require('./split.js');
+const External = require('./external.js');
 
 //factory to avoid object modifications in the "sandbox"
 module.exports = function() {
@@ -9,6 +10,9 @@ module.exports = function() {
     },
     split: function(data) {
       return new Split(data); 
+    },
+    external: function() {
+      return new External(arguments);
     }
   };
 };
