@@ -8,7 +8,7 @@ async function execute(originalData, workflow) {
   const document = buildDocument(apis, workflow);
   
   async function executeExternal(name, data, cancel = false) {
-    const results = await apis.searchWorkflows({ 
+    const results = await api.searchWorkflows({ 
       name,
       project_id: workflow.project_id
     });
