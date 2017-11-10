@@ -12,7 +12,8 @@ async function execute(originalData, workflow) {
       body: {
         name,
         project_id: workflow.project_id
-      }
+      },
+      project_id: workflow.project_id
     });
 
     if (results.count > 1) {
